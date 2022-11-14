@@ -1,0 +1,32 @@
+[extension_name]
+FelkonEx Custom Tools
+[extension_info]
+FelkonEx Custom Tools
+[insert_external]
+<div><p>FelkonEx's Custom Tools & Commands are installed.</p></div>
+[insert_command]
+SAMMI.extCommand("Website URL Validator", 3355443, 52, {
+    variable: ["Variable", 14, "is_valid_url"],
+    inValue: ["String To Check", 14, ""],
+    buttonID: ["Button ID", 14, "global"],
+});
+[insert_hook]
+case "Website URL Validator": {
+	websiteUrlValidator(LioranBoardJSON.variable, LioranBoardJSON.inValue, LioranBoardJSON.buttonID);
+}
+break;
+[insert_script]
+function websiteUrlValidator(variableName, value, buttonId) {
+    const validWebsiteRegex =
+        /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+
+    if (variableName === "") return SAMMI.alert("'Variable field' is empty");
+    if (value === "") return SAMMI.alert("'Value To Check' field is empty");
+
+    const regexCheck = new RegExp(validWebsiteRegex, "g");
+
+    regexCheck.test(value)
+        ? SAMMI.setVariable(variableName, true, buttonId)
+        : SAMMI.setVariable(variableName, false, buttonId);
+}
+[insert_over]
