@@ -1,5 +1,4 @@
 function Show-Divider {
-    Write-Host ""
     Write-Host "=============================="
     Write-Host ""
 }
@@ -14,7 +13,7 @@ function Convert-String($name) {
         ">" { "(greater_than)" }
         "|" { "(pipe_symbol)" }
         '"' { "(quotation_mark)" }
-        Default { "__INVALID___" }
+        Default { "(INV)" }
     }
 }
 
@@ -33,7 +32,7 @@ function Format-Date-Month($date) {
     return "$($year)-$($month)"
 }
 
-function Invoke-Chat-Downloader($filename, $month) {
+function Invoke-Chat-Downloader($id, $filename, $month) {
     $outputHTML = "$($filename).html"
     $outputTXT = "$($filename).txt"
     $folderPath = "vod_chats\$($formattedMonth)"
@@ -47,7 +46,7 @@ function Invoke-Chat-Downloader($filename, $month) {
     }
     else {
         Write-Host "Downloading HTML Chat" -ForegroundColor Yellow
-        .\TwitchDownloaderCLI.exe --mode ChatDownload --id 1642176464 --embed-emotes --bttv=true --ffz=true --stv=true --output "$($folderPath)\$($outputHTML)"
+        .\TwitchDownloaderCLI.exe --mode ChatDownload --id $id --embed-emotes --bttv=true --ffz=true --stv=true --output "$($folderPath)\$($outputHTML)"
         Write-Host "HTML Chat Downloaded!" -ForegroundColor Green
         Write-Host ""
     }
@@ -58,11 +57,16 @@ function Invoke-Chat-Downloader($filename, $month) {
     }
     else {
         Write-Host "Downloading Text Chat" -ForegroundColor Yellow
-        .\TwitchDownloaderCLI.exe --mode ChatDownload --id 1642176464 --output "$($folderPath)\$($outputTXT)"
+        .\TwitchDownloaderCLI.exe --mode ChatDownload --id $id --output "$($folderPath)\$($outputTXT)"
         Write-Host ""
         Write-Host "Text Chat Downloaded!" -ForegroundColor Green
     }
 }
+
+function Invoke-File-Copier {
+    robocopy '.\vod_chats\' 'G:\TWITCH_VODS\FelkonEx' /e /njh /njs /ndl /nc *.txt *.html
+}
+
 
 function Invoke-Main {
     if (-not(Test-Path -Path "yt-dlp.exe" -PathType Leaf)) {
@@ -102,11 +106,13 @@ function Invoke-Main {
             Write-Host " - Title: $($title)" -ForegroundColor Magenta
             Write-Host " - Date: $($formattedDate)" -ForegroundColor Magenta
             Write-Host ""
-
-            Invoke-Chat-Downloader $filename $formattedMonth
-
+            Invoke-Chat-Downloader $id $filename $formattedMonth
             Show-Divider
         }
+        Write-Host "Copying chat files to VOD directory" -ForegroundColor Magenta
+        Invoke-File-Copier
+        Write-Host "Copied chat files to VOD directory" -ForegroundColor Green
+        Show-Divider
     }
 }
 
