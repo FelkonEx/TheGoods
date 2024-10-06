@@ -1,16 +1,26 @@
+/*
+Triggers:
+ - When a stream poll is created
+ - When a stream poll is completed
+
+Logic:
+ - When poll is created, send message in chat that poll has been created
+ - When poll completed, calculate winning poll results and send message in chat
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 public class CPHInline
 {
-    public void pollCreated()
+    private void pollCreated()
     {
         string pollTitle = args["poll.Title"].ToString();
-        CPH.SendMessage($"Chat, new poll just dropped -> \"{pollTitle}\" ");
+        CPH.TwitchAnnounce($"New poll just dropped -> \"{pollTitle}\" ", true, "purple");
     }
 
-    public void pollCompleted()
+    private void pollCompleted()
     {
         int pollChoiceCount = Convert.ToInt32(args["poll.choices.count"].ToString());
 

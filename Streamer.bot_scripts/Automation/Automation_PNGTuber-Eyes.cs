@@ -4,14 +4,21 @@ using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
+/*
+Triggers:
+ - Random
+
+Logic:
+ - Move the PNGTuber's eye position randomly in OBS
+*/
+
 public class CPHInline
 {
-    public static Random rnd = new Random();
+    private static Random rnd = new Random();
+    private const string EYE_PUPIL_SCENE_SOURCE = "[S] PNGTuber | Eyes - Open - Pupil";
+    private const string EYE_PUPIL_IMAGE_SOURCE = "[I] PNGTuber | Head - Eyes - Puplis";
 
-    public string eyePupilSceneSrc = "[S] PNGTuber | Eyes - Open - Pupil";
-    public string eyePupilImgSrc = "[I] PNGTuber | Head - Eyes - Puplis";
-
-    public int getSceneItemId(string sceneName, string sourceName)
+    private int getSceneItemId(string sceneName, string sourceName)
     {
         SceneItemIdObject request = new SceneItemIdObject
         {
@@ -29,16 +36,16 @@ public class CPHInline
         return response.SceneItemId;
     }
 
-    public void transformEyePos()
+    private void transformEyePos()
     {
         int offset = 641;
         int posX = rnd.Next(7, 15) + offset;
         int posY = rnd.Next(-10, 5);
-        int sceneItemId = getSceneItemId(eyePupilSceneSrc, eyePupilImgSrc);
+        int sceneItemId = getSceneItemId(EYE_PUPIL_SCENE_SOURCE, EYE_PUPIL_IMAGE_SOURCE);
 
         SceneProperties props = new SceneProperties
         {
-            SceneName = eyePupilSceneSrc,
+            SceneName = EYE_PUPIL_SCENE_SOURCE,
             SceneItemId = sceneItemId,
             SceneItemTransform = new SceneTransformProperties
             {
@@ -50,7 +57,7 @@ public class CPHInline
         CPH.ObsSendRaw("SetSceneItemTransform", parameters, 0);
     }
 
-    public string sendRaw(string type, string parameters)
+    private string sendRaw(string type, string parameters)
     {
         return CPH.ObsSendRaw(type, parameters, 0);
     }

@@ -4,13 +4,18 @@ using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
+/*
+Triggers:
+ - When the first command is triggered by a user
+ - When someone triggers the first command for someone else
+
+Logic:
+ - Check if the user is asking for someone else or themselves
+ - Send message in chat based on first count for target
+*/
+
 public class CPHInline
 {
-    public void sendRaw(string type, string parameters)
-    {
-        CPH.ObsSendRaw(type, parameters, 0);
-    }
-
     public bool Execute()
     {
         bool checkingSomeoneElse = false;

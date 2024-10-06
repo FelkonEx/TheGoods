@@ -7,13 +7,13 @@ using Newtonsoft.Json;
 public class CPHInline
 {
     public static Random rnd = new Random();
-    public static string effectContainerSceneSrc = "[S] Overlay | Effect Container";
-    public static string ericAndreSceneSrc = "[S] Overlay | Eric Andre Meme";
-    public static string textSceneSrc = "[V] Overlay | We'll Be Right Back";
-    public static string ericAndreCameraSceneSrc = "[S] Overlay | Eric Andre Meme - Camera";
-    public static string cameraSrc = "[C] DSLR";
+    public const string EFFECT_CONTAINER_SCENE_SOURCE_NAME = "[S] Overlay | Effect Container";
+    public const string ERIC_ANDRE_SCENE_SOURCE_NAME = "[S] Overlay | Eric Andre Meme";
+    public const string TEST_SCENE_SOURCE_NAME = "[V] Overlay | We'll Be Right Back";
+    public const string ERIC_ANDRE_CAMERA_SCENE_SOURCE_NAME = "[S] Overlay | Eric Andre Meme - Camera";
+    public const string CAMERA_SOURCE_NAME = "[C] DSLR";
 
-    public void setCameraPos()
+    private void setCameraPos()
     {
         double cameraMin = 1.7;
         double cameraMax = 2;
@@ -22,11 +22,11 @@ public class CPHInline
         int cameraPosX = rnd.Next(880, 1030);
         int cameraPosY = rnd.Next(500, 600);
 
-        int sceneItemId = getSceneItemId(ericAndreCameraSceneSrc, cameraSrc);
+        int sceneItemId = getSceneItemId(ERIC_ANDRE_CAMERA_SCENE_SOURCE_NAME, CAMERA_SOURCE_NAME);
 
         SceneTransformObject transformInfo = new SceneTransformObject
         {
-            SceneName = ericAndreCameraSceneSrc,
+            SceneName = ERIC_ANDRE_CAMERA_SCENE_SOURCE_NAME,
             SceneItemId = sceneItemId,
             SceneItemTransform = new SceneTransformProps
             {
@@ -41,7 +41,7 @@ public class CPHInline
         transformItem(transformInfo);
     }
 
-    public void setTextPos()
+    private void setTextPos()
     {
         double textMin = 0.75;
         double textMax = 1;
@@ -52,11 +52,11 @@ public class CPHInline
         int textPosX = leftSide ? 540 : 1810;
         int textPosY = rnd.Next(450, 620);
 
-        int sceneItemId = getSceneItemId(ericAndreSceneSrc, textSceneSrc);
+        int sceneItemId = getSceneItemId(ERIC_ANDRE_SCENE_SOURCE_NAME, TEST_SCENE_SOURCE_NAME);
 
         SceneTransformObject transformInfo = new SceneTransformObject
         {
-            SceneName = ericAndreSceneSrc,
+            SceneName = ERIC_ANDRE_SCENE_SOURCE_NAME,
             SceneItemId = sceneItemId,
             SceneItemTransform = new SceneTransformProps
             {
@@ -71,18 +71,18 @@ public class CPHInline
         transformItem(transformInfo);
     }
 
-    public void runEffect()
+    private void runEffect()
     {
-        CPH.ObsSetFilterState(ericAndreSceneSrc, ericAndreCameraSceneSrc, "Freeze", 0, 0);
+        CPH.ObsSetFilterState(ERIC_ANDRE_SCENE_SOURCE_NAME, ERIC_ANDRE_CAMERA_SCENE_SOURCE_NAME, "Freeze", 0, 0);
         CPH.Wait(100); // wait 100ms
-        CPH.ObsSetSourceVisibility(effectContainerSceneSrc, ericAndreSceneSrc, true, 0);
+        CPH.ObsSetSourceVisibility(EFFECT_CONTAINER_SCENE_SOURCE_NAME, ERIC_ANDRE_SCENE_SOURCE_NAME, true, 0);
         CPH.Wait(3800); // wait 3800ms
-        CPH.ObsSetSourceVisibility(effectContainerSceneSrc, ericAndreSceneSrc, false, 0);
-        CPH.ObsSetFilterState(ericAndreSceneSrc, ericAndreCameraSceneSrc, "Freeze", 1, 0);
+        CPH.ObsSetSourceVisibility(EFFECT_CONTAINER_SCENE_SOURCE_NAME, ERIC_ANDRE_SCENE_SOURCE_NAME, false, 0);
+        CPH.ObsSetFilterState(ERIC_ANDRE_SCENE_SOURCE_NAME, ERIC_ANDRE_CAMERA_SCENE_SOURCE_NAME, "Freeze", 1, 0);
         CPH.Wait(1000); // wait 1000ms
     }
 
-    public int getSceneItemId(string sceneName, string sourceName)
+    private int getSceneItemId(string sceneName, string sourceName)
     {
         SceneItemIdObject request = new SceneItemIdObject();
         request.SceneName = sceneName;
@@ -98,13 +98,13 @@ public class CPHInline
         return response.SceneItemId;
     }
 
-    public void transformItem(SceneTransformObject obj)
+    private void transformItem(SceneTransformObject obj)
     {
         string transformParams = JsonConvert.SerializeObject(obj);
         sendRaw("SetSceneItemTransform", transformParams);
     }
 
-    public string sendRaw(string type, string parameters)
+    private string sendRaw(string type, string parameters)
     {
         return CPH.ObsSendRaw(type, parameters, 0);
     }

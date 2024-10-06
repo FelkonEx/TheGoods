@@ -2,18 +2,18 @@ using System;
 
 public class CPHInline
 {
-	public void predictionCreated()
+	private void predictionCreated()
 	{
 		string predictionTitle = args["prediction.Title"].ToString();
-		CPH.SendMessage($"Chat, go spend your points on the prediction: {predictionTitle} predictionStarted");
+		CPH.TwitchAnnounce($"Go spend your points on the prediction -> {predictionTitle} predictionStarted", true, "purple");
 	}
 
-	public void predictionLocked()
+	private void predictionLocked()
 	{
 		CPH.SendMessage("PauseChamp Prediction locked PREDICTING");
 	}
 
-	public void predictionCompleted()
+	private void predictionCompleted()
 	{
 		string winnerTitle = args["prediction.winningOutcome.title"].ToString();
 		string winnerColour = args["prediction.winningOutcome.color"].ToString();

@@ -7,12 +7,12 @@ public class CPHInline
 {
     public bool Execute()
     {
-        var channelColor = 9855971;
-        var channelPicture = args["targetUserProfileImageUrl"].ToString();
-        var game = args["game"].ToString();
-        var channelTitle = args["targetChannelTitle"].ToString();
-        var gameId = args["gameId"].ToString();
-        string content = $"# 🔴 Felkon just went LIVE <@&{865466161630412820}>! 🔴\n ## https://felkonex.live/twitch";
+        int channelColor = 9855971;
+        string channelPicture = args["targetUserProfileImageUrl"].ToString();
+        string game = args["game"].ToString();
+        string channelTitle = args["targetChannelTitle"].ToString();
+        string gameId = args["gameId"].ToString();
+        string content = $"# 🔴 I'm LIVE right now <@&{865466161630412820}>! 🔴\n ## https://twitch.tv/FelkonEx";
 
         var webhook = new DiscordWebhook
         {
@@ -21,8 +21,7 @@ public class CPHInline
                 new Embed {
                     Color = channelColor,
                     Title = $"Come Join the Stream!",
-                    // Description = $"We're doing some {game} Today!! <a:LETSGO:1034995435619766282>",
-                    Url = $"https://felkonex.live/twitch",
+                    Url = $"https://twitch.tv/FelkonEx",
                     Fields = new List<Field> {
                         new Field {
                             Name = $"We're doing some *{game}* Today! <a:LETSGO:1034995435619766282>",
@@ -35,13 +34,6 @@ public class CPHInline
                     },
                     Thumbnail = new Thumbnail {
                         Url = channelPicture
-                        // Url = $"https://static-cdn.jtvnw.net/ttv-boxart/509658-144x192.jpg"
-                        // Url = $"https://static-cdn.jtvnw.net/previews-ttv/live_user_vinesauce-440x248.jpg"
-                    },
-                    Image = new Thumbnail {
-                        // Url = channelPicture
-                        // Url = $"https://static-cdn.jtvnw.net/ttv-boxart/{gameId}-144x192.jpg"
-                        Url = $"https://static-cdn.jtvnw.net/previews-ttv/live_user_felkonex-440x248.jpg"
                     },
                 }
             }
@@ -51,8 +43,8 @@ public class CPHInline
         var x = client.PostAsync(
             "https://discord.com/api/webhooks/1191573029273227374/Pob8JrqBVk7I2ACH2vJwvqwTu6murepC2T154cvSK6AUF2dNktU7bggvhEauZGfys6nT",
             new StringContent(
-                json, 
-                System.Text.Encoding.UTF8, 
+                json,
+                System.Text.Encoding.UTF8,
                 "application/json"
             )
         ).Result;
